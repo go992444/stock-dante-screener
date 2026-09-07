@@ -2,7 +2,8 @@ name: Daily stock picks
 
 on:
   schedule:
-    - cron: "0 22 * * 0-4"
+    # 18:30 UTC = 03:30 KST — scan ~50min + GitHub delay buffer → ~07:00 KST notify
+    - cron: "30 18 * * 0-4"
   workflow_dispatch:
 
 env:
@@ -19,6 +20,12 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Notify scan started
+        run: |
+          curl -fsS -d "전 종목 스캔 중입니다. 결과는 약 1시간 내 도착합니다." \
+            -H "Title: Dante $(date -u +%Y-%m-%d) 스캔 시작" \
+            -H "Tags: hourglass_flowing_sand" \
+            "https://ntfy.sh/${NTFY_TOPIC}"
       - run: python daily.py --top 10 --ntfy
       - uses: actions/upload-artifact@v4
         if: always()
