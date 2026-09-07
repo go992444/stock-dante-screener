@@ -1,0 +1,35 @@
+name: Test afternoon picks
+
+on:
+  push:
+    paths:
+      - .github/workflows/test-afternoon-picks.yml
+  workflow_dispatch:
+
+env:
+  NTFY_TOPIC: dante-go992444-m8k3n7x2
+
+jobs:
+  scan-and-notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Notify test scan started
+        run: |
+          curl -fsS -d "오늘(9/7) 장 마감 기준 테스트 스캔 시작. 약 1시간 내 추천 종목 알림." \
+            -H "Title: Dante 테스트 스캔" \
+            -H "Tags: test_tube" \
+            "https://ntfy.sh/${NTFY_TOPIC}"
+      - run: python daily.py --top 10 --ntfy
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-picks-${{ github.run_id }}
+          path: reports/
+          retention-days: 3
