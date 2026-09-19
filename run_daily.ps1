@@ -1,5 +1,0 @@
-# Run daily picks at 07:00 before market open (adjust time as needed)
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-Set-Location $here
-$env:NTFY_TOPIC = "dante-go992444-m8k3n7x2"
-python daily.py --top 10 --ntfy
