@@ -1,0 +1,10 @@
+{
+  "name": "K-Pocket",
+  "short_name": "K-Pocket",
+  "description": "k-skill-proxy 조회 모음 (개인 비영리용)",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#1a73e8",
+  "lang": "ko"
+}
