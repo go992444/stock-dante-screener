@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/((?!k-pocket/).*)",
-      "destination": "https://k-skill-proxy.nomadamas.org/$1"
-    }
-  ]
-}
