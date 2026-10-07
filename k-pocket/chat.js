@@ -13,6 +13,7 @@ const HELP_TEXT = `이렇게 말해 보세요 (예시):
 · "역삼동 건축물대장" / PNU로 조회
 · "래미안 공시가 2025" (VWorld 키는 한 번 "vworld 키 저장: 발급키" 로 설정)
 · "이번 달 서울 공연" / "세종문화회관 공연장"
+· "서울 LH 청약" (임대단지 목록) / "LH 2016122300001530" (공급정보, 공고번호)
 
 참고용 조회만 가능하고, 예매·결제·법률자문은 아닙니다.`;
 
@@ -96,6 +97,25 @@ function parseIntent(raw) {
       toolId: "weather",
       params: { lat: "37.5665", lon: "126.9780" },
     };
+  }
+
+  const panIdM = text.replace(/\s/g, "").match(/(\d{16,20})/);
+  if (
+    (/LH|행복주택|apply\.lh/i.test(text) && /청약|공고|임대/.test(text)) ||
+    (panIdM && /LH|공고|공급|청약/.test(text))
+  ) {
+    if (panIdM) {
+      return {
+        type: "run",
+        toolId: "lh-notice",
+        params: { panId: panIdM[1], pageSize: "10" },
+      };
+    }
+    const regionM = text.match(/([가-힣]+(?:특별시|광역시|특별자치시|도))/);
+    const params = { pageSize: "10" };
+    if (regionM) params.cnpCdNm = regionM[1];
+    else if (text.includes("서울")) params.cnpCdNm = "서울특별시";
+    return { type: "run", toolId: "lh-notice", params };
   }
 
   if (/공연장/.test(text) && !/공연\s*목록/.test(text)) {
@@ -458,6 +478,49 @@ function summarize(toolId, data) {
 
   if (toolId === "kopis") {
     return summarizeKopis(data);
+  }
+
+  if (toolId === "lh-notice") {
+    const items = data?.items || [];
+    if (data?.mode === "supply") {
+      if (!items.length) {
+        return lines([
+          "공급정보를 찾지 못했습니다. 공고번호·코드가 맞는지 확인해 주세요.",
+          data?.raw ? jsonTail(data.raw, 800) : "",
+        ]);
+      }
+      return lines([
+        `공고 ${data.panId} 공급 물량 ${items.length}건 (일부만 표시)`,
+        "",
+        ...items.slice(0, 6).map((it, i) => {
+          const use = it.LND_US_DS_CD_NM || it.lndUsDsCdNm || it.공급용도;
+          const addr = it.LGDN_DTL_ADR || it.lgdnDtlAdr || it.소재지;
+          const price = it.SPL_XPC_AMT || it.splXpcAmt;
+          return `${i + 1}. ${use || "공급"}\n   ${addr || ""}${price ? `\n   예정가격: ${price}` : ""}`;
+        }),
+      ]);
+    }
+    if (!items.length) {
+      return lines([
+        "임대단지 목록이 비었거나 API 신청·키를 확인해 주세요.",
+        "data.go.kr에서 「임대주택단지 조회」 활용신청이 필요할 수 있습니다.",
+        data?.raw ? jsonTail(data.raw, 600) : "",
+      ]);
+    }
+    return lines([
+      `서울 등 지역 임대단지 ${items.length}건 (상위 ${Math.min(8, items.length)}개)`,
+      "",
+      ...items.slice(0, 8).map((it, i) => {
+        const name = it.SBD_LGO_NM || it.sbdLgoNm || it.단지명;
+        const area = it.ARA_NM || it.araNm;
+        const type = it.AIS_TP_CD_NM || it.aisTpCdNm;
+        const rent = it.RFE || it.rfe;
+        const dep = it.LS_GMY || it.lsGmy;
+        return `${i + 1}. ${name || "단지"} · ${type || ""} (${area || ""})${dep ? `\n   보증금 ${dep} / 월 ${rent || "?"}` : ""}`;
+      }),
+      "",
+      "청약 공고·공급 호수는 apply.lh.kr 또는 공고번호로 ‘LH 16자리숫자’ 조회",
+    ]);
   }
 
   if (toolId === "law" || toolId === "real-estate" || toolId === "building" || toolId === "housing-price") {

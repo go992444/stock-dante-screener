@@ -419,9 +419,34 @@ const tools = [
       return apiGet(`/v1/kopis/performances?${q}`);
     },
   },
+  {
+    id: "lh-notice",
+    tab: "LH",
+    title: "LH 임대·공급 조회",
+    skill: "lh-lease-notice-spl-info",
+    disclaimer:
+      "목록은 임대주택단지 API, 공고번호가 있으면 분양임대 공급정보 API(data.go.kr)입니다. 청약·접수는 apply.lh.kr에서 진행하세요.",
+    fields: [],
+    path: null,
+    async run(params) {
+      const q = new URLSearchParams();
+      if (params.panId) q.set("panId", params.panId);
+      if (params.cnpCdNm) q.set("cnpCdNm", params.cnpCdNm);
+      if (params.cnpCd) q.set("cnpCd", params.cnpCd);
+      if (params.pageSize) q.set("pageSize", params.pageSize);
+      if (params.splInfTpCd) q.set("splInfTpCd", params.splInfTpCd);
+      if (params.uppAisTpCd) q.set("uppAisTpCd", params.uppAisTpCd);
+      return apiGetLocal(`/lh-notice?${q}`);
+    },
+  },
 ];
 
 const VWORLD_KEY_STORAGE = "k-pocket-vworld-key";
+
+async function apiGetLocal(pathAndQuery) {
+  const path = pathAndQuery.startsWith("/") ? pathAndQuery : `/${pathAndQuery}`;
+  return apiGet(`/k-pocket${path}`);
+}
 
 function vworldHeaders(params) {
   const key = params.vworldKey?.trim();

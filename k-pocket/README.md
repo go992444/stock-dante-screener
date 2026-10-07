@@ -43,6 +43,7 @@
 | 약 | `mfds-drug-safety` | |
 
 | 공연 | `kopis-performance-search` | 공연·공연장 목록/상세 |
+| LH | `lh-lease-notice-spl-info` | 임대단지 목록 + 공고번호 시 공급정보 (data.go.kr, `DATA_GO_KR_API_KEY`) |
 
 
 
