@@ -1,0 +1,169 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #0f1419;
+  color: #e8eaed;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.top {
+  padding: 0.75rem 1rem 0.5rem;
+  border-bottom: 1px solid #2a323c;
+  flex-shrink: 0;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.disclaimer {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  color: #9aa0a6;
+}
+
+.version-badge {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: #1a5fb4;
+  border-radius: 6px;
+  vertical-align: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+.feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bubble {
+  margin-bottom: 0.85rem;
+  max-width: 100%;
+}
+
+.bubble.user {
+  text-align: right;
+}
+
+.bubble.user .card {
+  display: inline-block;
+  text-align: left;
+  background: #1a5fb4;
+  color: #fff;
+  border-radius: 14px 14px 4px 14px;
+}
+
+.explain {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  padding: 0.65rem 0.75rem;
+  margin: 0.35rem 0 0.5rem;
+  background: #151b22;
+  border-radius: 8px;
+  border-left: 3px solid #3d7eff;
+}
+
+.bubble.bot .card {
+  background: #1c2229;
+  border: 1px solid #2a323c;
+  border-radius: 14px 14px 14px 4px;
+}
+
+.card {
+  padding: 0.65rem 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.card h3 {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.8rem;
+  color: #8ab4f8;
+  font-weight: 600;
+}
+
+.card h3:first-child {
+  margin-top: 0;
+}
+
+.card .meta {
+  font-size: 0.75rem;
+  color: #9aa0a6;
+  margin-bottom: 0.5rem;
+}
+
+.card .section-title {
+  font-weight: 600;
+  color: #c4c7c5;
+  margin-top: 0.5rem;
+}
+
+.composer {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.75rem;
+  border-top: 1px solid #2a323c;
+  background: #0f1419;
+  flex-shrink: 0;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: none;
+  border: 1px solid #3c4043;
+  border-radius: 12px;
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+  background: #1c2229;
+  color: inherit;
+  min-height: 2.75rem;
+}
+
+.composer button {
+  border: none;
+  border-radius: 12px;
+  padding: 0 1rem;
+  font-weight: 600;
+  background: #1a5fb4;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.composer button:disabled {
+  opacity: 0.5;
+}
+
+.error {
+  color: #f28b82;
+}
+
+.typing {
+  color: #9aa0a6;
+  font-size: 0.85rem;
+}

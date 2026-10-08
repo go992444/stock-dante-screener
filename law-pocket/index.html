@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#1a5fb4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>법령 참고 v2.0.0</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <h1>법령 참고 <span class="version-badge" id="app-version">v2.0.0</span></h1>
+      <p class="disclaimer">법률 자문이 아닙니다 · 국가법령정보 검색 · universal+ai</p>
+    </header>
+
+    <main id="feed" class="feed" aria-live="polite"></main>
+
+    <form id="form" class="composer">
+      <textarea
+        id="input"
+        rows="2"
+        placeholder="예: 퇴사했는데 연차수당을 안 준다고 해요"
+        autocomplete="off"
+        enterkeyhint="search"
+      ></textarea>
+      <button type="submit" id="send">검색</button>
+    </form>
+
+    <script src="/app.js?v=2.0.0" type="module"></script>
+  </body>
+</html>
