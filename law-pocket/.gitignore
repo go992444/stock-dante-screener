@@ -1,2 +1,4 @@
 .vercel
 .env*
+scripts/last-ask.json
+scripts/*.local.json
